@@ -455,12 +455,7 @@ namespace DiscordIdentifier
 
 					private void Image_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
 					{
-               var mainWindow = new MainWindow(); // Hier ersetzt du "MainWindow" durch den Namen deines Hauptfensters, wenn er anders ist.
-
-               // Erstelle eine Instanz der Seite "ServerSelect"
-               var serverSelectPage = new pages.ServerSelect();
-
-               serverSelectPage.Visibility = Visibility.Visible;
+               MessageBox.Show("Hier folgt ein Fenster zum Editieren der DB Zugangsdaten.", "DB Settings", MessageBoxButton.OK, MessageBoxImage.Information);
           }
 		 }
 }

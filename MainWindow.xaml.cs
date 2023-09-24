@@ -186,25 +186,60 @@ namespace DiscordIdentifier
                          // Hier kannst du auf den Wert in der bearbeiteten Zelle zugreifen
                          if (textBox.Text.Length > 17)
                          {
-                              string query = "INSERT INTO ID_Discord (discord_ID) VALUES('" + textBox.Text + "');";
-
-                              using (SqlConnection connection = new SqlConnection(getConStr()))
+                              string query = "";
+                              if ( CheckIfExist(textBox.Text) == 0 )
                               {
-                                   connection.Open();
+                                   //INSERT
+                                   query = "INSERT INTO ID_Discord (discord_ID) VALUES('" + textBox.Text + "');";
+                                   using (SqlConnection connection = new SqlConnection(getConStr()))
+                                   {
+                                        connection.Open();
+                                        int offsetValue = 1;
+                                        using (SqlCommand command = new SqlCommand(query, connection))
+                                        {
+                                             command.ExecuteNonQuery();
+                                        }
+                                        int newID = GetNewElementID(textBox.Text);
+                                        if (onlyPermitted)
+                                        {
+                                             offsetValue = 0;
+                                        }
 
-                                   using (SqlCommand command = new SqlCommand(query, connection))
-                                   {
-                                        command.ExecuteNonQuery();
+                                        query = "INSERT INTO ID_Status (discord_ID, hatStatus) VALUES(" + newID + ", " + ((int)editedRow.id_bezeichnung + offsetValue) + ")";
+                                        using (SqlCommand command = new SqlCommand(query, connection))
+                                        {
+                                             command.ExecuteNonQuery();
+                                        }
+                                        connection.Close();
                                    }
-                                   int newID = GetNewElementID(textBox.Text);
-                                   query = "INSERT INTO ID_Status (discord_ID, hatStatus) VALUES(" + newID + ", " + ((int)editedRow.id_bezeichnung + 1) + ")";
-                                   using (SqlCommand command = new SqlCommand(query, connection))
-                                   {
-                                        command.ExecuteNonQuery();
-                                   }
-                                   connection.Close();
                               }
-                              
+															else
+															{
+                                   //UPDATE
+                                   id_is_view selectedData = (id_is_view)discordStatus.SelectedItem;
+                                   query = "UPDATE ID_Discord SET discord_ID='" + textBox.Text + "' WHERE ID=" + selectedData.thisid;
+                                   using (SqlConnection connection = new SqlConnection(getConStr()))
+                                   {
+                                        connection.Open();
+                                        int offsetValue = 1;
+                                        using (SqlCommand command = new SqlCommand(query, connection))
+                                        {
+                                             command.ExecuteNonQuery();
+                                        }
+                                        int newID = GetNewElementID(textBox.Text);
+                                        if (onlyPermitted)
+                                        {
+                                             offsetValue = 0;
+                                        }
+
+                                        query = "UPDATE ID_Status SET hatStatus=" + ((int)editedRow.id_bezeichnung + offsetValue) + " WHERE discord_ID=" + selectedData.thisid;
+                                        using (SqlCommand command = new SqlCommand(query, connection))
+                                        {
+                                             command.ExecuteNonQuery();
+                                        }
+                                        connection.Close();
+                                   }
+                              }
                          }
                     }
                }
@@ -294,9 +329,19 @@ namespace DiscordIdentifier
 
                     int newStatus = 1;
 
-                    if(ComboBox_newStatus.SelectedIndex > 1 ){
-                         newStatus = ComboBox_newStatus.SelectedIndex +1;
+
+                    if (onlyPermitted)
+                    {
+                         newStatus = 12;
                     }
+                    else
+                    {
+                         if (ComboBox_newStatus.SelectedIndex > 1)
+                         {
+                              newStatus = ComboBox_newStatus.SelectedIndex + 1;
+                         }
+                    }
+                    
 
                     query = "INSERT INTO ID_Status (discord_ID, hatStatus) VALUES(" + newID + ", " + newStatus + ")";
                     using (SqlCommand command = new SqlCommand(query, connection))
@@ -433,14 +478,17 @@ namespace DiscordIdentifier
 
 					private void toggleButton_Checked(object sender, RoutedEventArgs e)
 					{
-                if (toggleButton.IsChecked == true)
+               if (toggleButton.IsChecked == true)
                {
                     // Der ToggleButton ist eingeschaltet
                     onlyPermitted = true;
                     toggleButton.Content = "zeige Blocklist";
                     toggleButton.Background = Brushes.Black;
                     toggleButton.Foreground = Brushes.White;
+                    
+                    ComboBox_newStatus.IsEnabled = false;
                     LoadDataFromDatabase();
+                    ComboBox_newStatus.SelectedIndex = 0;
                }
                else
                {
@@ -449,6 +497,7 @@ namespace DiscordIdentifier
                     toggleButton.Content = "zeige Permits";
                     toggleButton.Background = Brushes.Yellow;
                     toggleButton.Foreground = Brushes.Black;
+                    ComboBox_newStatus.IsEnabled = true;
                     LoadDataFromDatabase();
                }
           }
@@ -457,5 +506,6 @@ namespace DiscordIdentifier
 					{
                MessageBox.Show("Hier folgt ein Fenster zum Editieren der DB Zugangsdaten.", "DB Settings", MessageBoxButton.OK, MessageBoxImage.Information);
           }
+
 		 }
 }

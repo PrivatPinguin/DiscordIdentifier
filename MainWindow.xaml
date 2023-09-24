@@ -91,13 +91,13 @@
 										<ColumnDefinition Width="65*"/>
 										<ColumnDefinition Width="11*"/>
 							 </Grid.ColumnDefinitions>
-							 <ToggleButton Content="zeige Permits" Grid.Column="3" Grid.ColumnSpan="2" Name="toggleButton" Margin="2" Background="Yellow" Foreground="Black" IsChecked="False" Click="toggleButton_Checked"/>
+							 <ToggleButton Content="zeige Permits" Grid.Column="3" Grid.ColumnSpan="2" Name="toggleButton" Margin="2" Background="Yellow" Foreground="Black" IsChecked="False" Click="toggleButton_Checked" />
 
 							 <TextBox x:Name="searchBox" HorizontalContentAlignment="Center"  Margin="2,2,2,2" TextWrapping="Wrap" VerticalContentAlignment="Center" Grid.Column="1" Grid.Row="1" PreviewKeyUp="searchBox_PreviewKeyUp" TextChanged="searchBox_TextChanged" />
 							 <Button x:Name="searchButton" Background="Black" Foreground="White" Grid.Column="3" Content="Einfügen" Margin="2,2,2,2" Grid.Row="1" Click="searchButton_Click"/>
 							 <Button x:Name="clearButton" Background="Black" Foreground="White" Grid.Column="4" Content="Clear" Margin="2" Grid.Row="1" Click="clearButton_Click"/>
 
-							 <ComboBox x:Name="ComboBox_newStatus" Grid.Column="1" Margin="2,2,2,2" Grid.Row="3" />
+							 <ComboBox x:Name="ComboBox_newStatus" Grid.Column="1" Margin="2,2,2,2" Grid.Row="3"/>
 							 <Image Grid.ColumnSpan="6" Grid.Row="5" Margin="0,0,9,6" Source="pengu_medium_blackHoody.png" MouseRightButtonUp="Image_MouseRightButtonUp" />
 							 <Button x:Name="clipboardButton" Background="Black" Foreground="White" Grid.Column="3" Content="ClipID" Margin="2,2,2,2" Grid.Row="3" Click="clipboardButton_Click" Grid.ColumnSpan="1" />
 							 <Label x:Name="lbCounter" Grid.Column="3" Grid.Row="4" Content="Counter" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="15" Grid.ColumnSpan="1"/>

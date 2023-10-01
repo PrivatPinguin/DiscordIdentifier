@@ -16,7 +16,7 @@
 							 <ColumnDefinition Width="5*"/>
 							 <ColumnDefinition Width="4*"/>
 					</Grid.ColumnDefinitions>
-					<DataGrid x:Name="discordStatus" Opacity="0.9" AutoGenerateColumns="False" Margin="2,2,2,2" Grid.Row="1" CellEditEnding="discordStatus_CellEditEnding" CanUserAddRows="False" AlternationCount="2" Foreground="black"  SelectionChanged="discordStatus_SelectionChanged" Grid.RowSpan="2" LostFocus="discordStatus_LostFocus">
+					<DataGrid x:Name="discordStatus" Opacity="0.9" AutoGenerateColumns="False" Margin="2,2,2,2" Grid.Row="1" CellEditEnding="discordStatus_CellEditEnding" CanUserAddRows="False" AlternationCount="2" Foreground="black"  SelectionChanged="discordStatus_SelectionChanged" Grid.RowSpan="2">
 							 <!--SelectionMode="Single"-->
 							 <DataGrid.Resources>
 										<!-- Ändern der Auswahlhintergrundfarbe auf Gelb -->
@@ -74,7 +74,7 @@
 										<DataGridTextColumn Header="SortBy" Binding="{Binding bezeichnung}" Width="1*" />
 							 </DataGrid.Columns>
 					</DataGrid>
-					<Grid Grid.ColumnSpan="2" Margin="444,30,0,0" Grid.RowSpan="3">
+					<Grid Grid.ColumnSpan="2" Margin="2" Grid.RowSpan="3" Grid.Column="1">
 							 <Grid.RowDefinitions>
 										<RowDefinition Height="2*"/>
 										<RowDefinition Height="2*" MinHeight="25"/>

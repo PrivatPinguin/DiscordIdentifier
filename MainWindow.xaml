@@ -16,7 +16,7 @@
 							 <ColumnDefinition Width="5*"/>
 							 <ColumnDefinition Width="4*"/>
 					</Grid.ColumnDefinitions>
-					<DataGrid x:Name="discordStatus" AutoGenerateColumns="False" Margin="2,2,2,2" Grid.Row="1" CellEditEnding="discordStatus_CellEditEnding" CanUserAddRows="False" AlternationCount="2" Foreground="black"  SelectionChanged="discordStatus_SelectionChanged" Grid.RowSpan="2">
+					<DataGrid x:Name="discordStatus" Opacity="0.9" AutoGenerateColumns="False" Margin="2,2,2,2" Grid.Row="1" CellEditEnding="discordStatus_CellEditEnding" CanUserAddRows="False" AlternationCount="2" Foreground="black"  SelectionChanged="discordStatus_SelectionChanged" Grid.RowSpan="2" LostFocus="discordStatus_LostFocus">
 							 <!--SelectionMode="Single"-->
 							 <DataGrid.Resources>
 										<!-- Ändern der Auswahlhintergrundfarbe auf Gelb -->
@@ -98,11 +98,12 @@
 							 <Button x:Name="clearButton" Background="Black" Foreground="White" Grid.Column="4" Content="Clear" Margin="2" Grid.Row="1" Click="clearButton_Click"/>
 
 							 <ComboBox x:Name="ComboBox_newStatus" Grid.Column="1" Margin="2,2,2,2" Grid.Row="3"/>
-							 <Image Grid.ColumnSpan="6" Grid.Row="5" Margin="0,0,9,6" Source="pengu_medium_blackHoody.png" MouseRightButtonUp="Image_MouseRightButtonUp" />
+							 <Image Grid.ColumnSpan="4" Grid.Row="5" Margin="2,2,2,2" Source="pengu_medium_blackHoody.png" MouseRightButtonUp="Image_MouseRightButtonUp" Grid.Column="1" />
 							 <Button x:Name="clipboardButton" Background="Black" Foreground="White" Grid.Column="3" Content="ClipID" Margin="2,2,2,2" Grid.Row="3" Click="clipboardButton_Click" Grid.ColumnSpan="1" />
 							 <Label x:Name="lbCounter" Grid.Column="3" Grid.Row="4" Content="Counter" Margin="2,2,2,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="15" Grid.ColumnSpan="1"/>
 							 <Button x:Name="clipboard_tagButton" Background="Black" Foreground="White" Grid.Column="4" Content="ClipTag" Margin="2,2,2,2" Grid.Row="3" Click="clipboardButtonTag_Click" Grid.ColumnSpan="1" />
 							 <Button x:Name="unban_tagButton" Background="DarkRed" Foreground="White" Grid.Column="4" Content="UN-Ban" Margin="2,2,2,2" Grid.Row="4" Click="unbanUser_Click" Grid.ColumnSpan="1" />
+							 <TextBox x:Name="infoBox" Grid.Column="1" Margin="2" Grid.Row="5" TextWrapping="Wrap" Text="" Grid.ColumnSpan="4" AcceptsReturn="True" MaxLength="255" LostKeyboardFocus="infoBox_LostKeyboardFocus" Opacity="0.9"/>
 
 					</Grid>
 		 </Grid>

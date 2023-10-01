@@ -80,7 +80,7 @@ namespace DiscordIdentifier
 
           private void LoadDataFromDatabase()
           {
-               string query = "SELECT ID, discord_ID, Expr1 AS bID, bezeichnung FROM idHasStatus";
+               string query = "SELECT ID,discord_ID,Expr1 AS bID,bezeichnung FROM idHasStatus";
 
                if (onlyPermitted)
                {
@@ -391,6 +391,13 @@ namespace DiscordIdentifier
           }
           private void discordStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
 					{
+               infoBox.Visibility = Visibility.Visible;
+               id_is_view thisSelection = (id_is_view)discordStatus.SelectedItem;
+               //GetNewElementID()
+               if (thisSelection != null) {
+                    LeadInfobox(thisSelection.thisid);
+               }
+               
                //DataGrid comboBox = (DataGrid)sender;
                //ComboBox comboBox = (ComboBox)comboBox.SelectedItem
                //if ((comboBox.DataContext is DiscordIdentifier.id_is_view))
@@ -449,6 +456,7 @@ namespace DiscordIdentifier
 
 					private void searchBox_PreviewKeyUp(object sender, KeyEventArgs e = null)
 					{
+               infoBox.Visibility = Visibility.Visible;
                if (CheckIfExist(searchBox.Text) > 0)
                {
                     searchButton.IsEnabled = false;
@@ -502,10 +510,106 @@ namespace DiscordIdentifier
                }
           }
 
+          private int CheckIfNoteExist(int dbID)
+          {
+               string query = "SELECT * FROM infoText WHERE tableID=" + dbID;
+               int rowCount = 0;
+
+               using (SqlConnection connection = new SqlConnection(getConStr()))
+               {
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                         // Durch die Zeilen der Abfrageergebnisse iterieren und die Anzahl der Zeilen zählen
+                         while (reader.Read())
+                         {
+                              rowCount++;
+                         }
+                    }
+
+                    connection.Close();
+               }
+
+               return rowCount;
+          }
+
+          private void LeadInfobox(int thisID)
+					{
+               infoBox.Text = "";
+               string connectionString = getConStr();
+               if (CheckIfNoteExist(thisID)>0){
+                    // info exists allready
+                    
+
+                    string query = "SELECT note FROM infoText WHERE tableID=" + thisID;
+
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                         connection.Open();
+                         using (SqlCommand command = new SqlCommand(query, connection))
+                         using (SqlDataReader reader = command.ExecuteReader())
+                         {
+                              while (reader.Read())
+                              {
+                                   string bezeichnung = reader["note"].ToString();
+                                   infoBox.Text = bezeichnung.Trim();
+                              }
+                         }
+                         connection.Close();
+                    }
+               }
+							 else
+							 {
+                    using (SqlConnection connection = new SqlConnection(getConStr()))
+                    {
+                         connection.Open();
+                         string query = "INSERT INTO infoText (tableID,note) VALUES(" + thisID + ",'" + infoBox.Text.Trim() + "')";
+                         using (SqlCommand command = new SqlCommand(query, connection))
+                         {
+                              command.ExecuteNonQuery();
+                         }
+                         connection.Close();
+                    }
+               }
+               
+
+          }
+          private void SaveInfoBox()
+					{
+               id_is_view thisSelection = (id_is_view)discordStatus.SelectedItem;
+               //GetNewElementID()
+               if (thisSelection != null)
+               {
+                    
+                    using (SqlConnection connection = new SqlConnection(getConStr()))
+                    {
+                         connection.Open();
+                         string infoText = infoBox.Text.Trim();
+                         string query = "UPDATE infoText SET note='" + infoText + "' WHERE tableID=" + thisSelection.thisid;
+                         using (SqlCommand command = new SqlCommand(query, connection))
+                         {
+                              command.ExecuteNonQuery();
+                         }
+                         connection.Close();
+                    }
+               }
+               
+
+          }
+
+
 					private void Image_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
 					{
                MessageBox.Show("Hier folgt ein Fenster zum Editieren der DB Zugangsdaten.", "DB Settings", MessageBoxButton.OK, MessageBoxImage.Information);
           }
 
+					private void infoBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+					{
+               //save InfoBox
+               SaveInfoBox();
+
+          }
 		 }
 }

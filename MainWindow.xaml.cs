@@ -315,8 +315,9 @@ namespace DiscordIdentifier
 
 					private void searchButton_Click(object sender, RoutedEventArgs e)
 					{
+               
                string query = "INSERT INTO ID_Discord (discord_ID) VALUES('" + searchBox.Text + "');";
-
+               int newID = -1;
                using (SqlConnection connection = new SqlConnection(getConStr()))
                {
                     connection.Open();
@@ -325,7 +326,7 @@ namespace DiscordIdentifier
                     {
                          command.ExecuteNonQuery();
                     }
-                    int newID = GetNewElementID(searchBox.Text);
+                    
 
                     int newStatus = 1;
 
@@ -341,8 +342,8 @@ namespace DiscordIdentifier
                               newStatus = ComboBox_newStatus.SelectedIndex + 1;
                          }
                     }
-                    
 
+                    newID = GetNewElementID(searchBox.Text);
                     query = "INSERT INTO ID_Status (discord_ID, hatStatus) VALUES(" + newID + ", " + newStatus + ")";
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
@@ -350,10 +351,18 @@ namespace DiscordIdentifier
                     }
 
                     connection.Close();
+                    
+               }
+               if (newID > 0)
+							 {
+                    LeadInfobox(newID); //GetNewElementID()    
                }
                SearchAndFocus(searchBox.Text);
                searchBox.Clear();
+               infoBox.Clear();
                LoadDataFromDatabase();
+
+               
           }
           private void CopyRowsWithSpaceToClipboard(Boolean withTags = false)
           {
@@ -447,6 +456,7 @@ namespace DiscordIdentifier
 
                          LoadDataFromDatabase();
                          searchBox.Clear();
+                         infoBox.Clear();
                          searchButton.IsEnabled = true;
                          ComboBox_newStatus.SelectedIndex = 0;
                     }
@@ -479,6 +489,7 @@ namespace DiscordIdentifier
           private void clearButton_Click(object sender, RoutedEventArgs e)
 					{
                searchBox.Clear();
+               infoBox.Clear();
                ComboBox_newStatus.SelectedIndex = 0;
                discordStatus.UnselectAll();
 
@@ -537,7 +548,7 @@ namespace DiscordIdentifier
 
           private void LeadInfobox(int thisID)
 					{
-               infoBox.Text = "";
+               //infoBox.Text = "";
                string connectionString = getConStr();
                if (CheckIfNoteExist(thisID)>0){
                     // info exists allready
